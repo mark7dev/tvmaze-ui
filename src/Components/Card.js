@@ -1,8 +1,13 @@
 import React from 'react';
 
-const Card = () => {
+const Card = ({show}) => {
+
+    const {id} = show;
+
     return ( 
-        <h1>CARD</h1>
+        <div>
+            <p>{id}</p>
+        </div>
     );
 }
  
