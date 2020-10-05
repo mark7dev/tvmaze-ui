@@ -9,6 +9,7 @@ const Home = () => {
     const [shows, setShows] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [isSearch, setIsSearch] = useState(false);
+    const [showSearch, setShowSearch] = useState('');
     const [showFound, setShowFound] = useState({});
 
     const nextPage = () => {
@@ -24,12 +25,13 @@ const Home = () => {
     const getData = () => {
         // let getShows = 'http://api.tvmaze.com/shows?page=203';
         let getShows = `http://api.tvmaze.com/shows?page=${currentPage}`;
-        let getSearch = 'http://api.tvmaze.com/singlesearch/shows?q=girls';
+        let getSearch = `http://api.tvmaze.com/singlesearch/shows?q=${showSearch}`;
         let url
         isSearch ? url = getSearch : url = getShows;
-        // axios.get(`http://api.tvmaze.com/shows?page=${currentPage}`)
+
         axios.get(url)
         .then(response => {
+            console.log(response.data[0]);
             console.log(response.data);
             isSearch ? setShowFound(response.data) : setShows(response.data);
         })
@@ -40,11 +42,14 @@ const Home = () => {
 
     useEffect(() => {
         getData();
-    }, [currentPage]);
+    }, [currentPage, showSearch]);
 
     return ( 
         <div>
-            <Search />
+            <Search 
+                setShowSearch={setShowSearch}
+                setIsSearch={setIsSearch}
+            />
             <p>{currentPage}</p>
             <button
                 onClick={previousPage}
@@ -52,12 +57,15 @@ const Home = () => {
             <button
                 onClick={nextPage}
             >Next</button>
-            <Card 
-                show={showFound}
-            />
-            <List 
-                shows={shows}
-            />
+            {
+                isSearch ?
+                <Card 
+                    show={showFound}
+                /> :
+                <List 
+                    shows={shows}
+                />
+            }
         </div>
     );
 }
