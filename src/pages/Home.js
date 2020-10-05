@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Search from '../Components/Search';
-import List from '../Components/List';
-import Card from '../Components/Card';
+import Search from '../components/Search';
+import List from '../components/List';
+import Card from '../components/Card';
 
 const Home = () => {
 
