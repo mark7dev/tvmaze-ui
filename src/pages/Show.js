@@ -13,7 +13,6 @@ const Show = () => {
     useEffect(() => {
         axios(`http://api.tvmaze.com/shows/${id}`)
             .then(response => {
-                console.log(response.data);
                 setData(response.data)
             })
             .catch(error => {

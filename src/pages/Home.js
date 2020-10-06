@@ -26,8 +26,6 @@ const Home = () => {
         axios.get(url)
         .then(response => {
             setLoading(false);
-            // console.log(response.data[0]);
-            // console.log(response.data);
             isSearch ? setShows([response.data]) : setShows(response.data);
         })
         .catch(error => {
