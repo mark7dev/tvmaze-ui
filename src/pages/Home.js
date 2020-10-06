@@ -3,6 +3,7 @@ import axios from 'axios';
 import Search from '../components/Search';
 import List from '../components/List';
 import Card from '../components/Card';
+import './styles/Home.css';
 
 const Home = () => {
 
@@ -11,6 +12,7 @@ const Home = () => {
     const [isSearch, setIsSearch] = useState(false);
     const [showSearch, setShowSearch] = useState('');
     const [showFound, setShowFound] = useState({});
+    const [loading, setLoading] = useState(true);
 
     const nextPage = () => {
         let next = currentPage + 1;
@@ -23,6 +25,7 @@ const Home = () => {
     }
 
     const getData = () => {
+        setLoading(true);
         // let getShows = 'http://api.tvmaze.com/shows?page=203';
         let getShows = `http://api.tvmaze.com/shows?page=${currentPage}`;
         let getSearch = `http://api.tvmaze.com/singlesearch/shows?q=${showSearch}`;
@@ -31,17 +34,21 @@ const Home = () => {
 
         axios.get(url)
         .then(response => {
+            setLoading(false);
             console.log(response.data[0]);
             console.log(response.data);
             isSearch ? setShowFound(response.data) : setShows(response.data);
+            setShows(response.data);
         })
         .catch(error => {
+            setLoading(false);
             console.log(error);
         })
     };
 
     useEffect(() => {
         getData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentPage, showSearch]);
 
     return ( 
@@ -50,21 +57,38 @@ const Home = () => {
                 setShowSearch={setShowSearch}
                 setIsSearch={setIsSearch}
             />
-            <p>{currentPage}</p>
-            <button
-                onClick={previousPage}
-            >Last</button>
-            <button
-                onClick={nextPage}
-            >Next</button>
             {
-                isSearch ?
+                isSearch && !loading ?
                 <Card 
                     show={showFound}
                 /> :
-                <List 
-                    shows={shows}
-                />
+                <div className="allShows__container">
+                    <div className="pagination__container">
+                        <button 
+                            className="btnPag"
+                            onClick={previousPage}
+                        >Previous</button>
+                        <p className="currentPage">Page {currentPage}</p>
+                        <button
+                            className="btnPag"
+                            onClick={nextPage}
+                        >Next</button>
+                    </div>
+                    <List 
+                        shows={shows}
+                    />
+                    <div className="pagination__container">
+                        <button 
+                            className="btnPag"
+                            onClick={previousPage}
+                        >Previous</button>
+                        <p className="currentPage">Page {currentPage}</p>
+                        <button
+                            className="btnPag"
+                            onClick={nextPage}
+                        >Next</button>
+                    </div>
+                </div>    
             }
         </div>
     );
