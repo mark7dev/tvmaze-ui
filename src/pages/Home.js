@@ -26,8 +26,8 @@ const Home = () => {
         axios.get(url)
         .then(response => {
             setLoading(false);
-            console.log(response.data[0]);
-            console.log(response.data);
+            // console.log(response.data[0]);
+            // console.log(response.data);
             isSearch ? setShows([response.data]) : setShows(response.data);
         })
         .catch(error => {
@@ -36,6 +36,14 @@ const Home = () => {
             console.log(error);
         })
     };
+
+    const getDataAgain = () => {
+        setCurrentPage(1);
+        setIsSearch(false);
+        setShowSearch('');
+        setLoading(true);
+        setError('');
+    }
 
     useEffect(() => {
         getData();
@@ -55,7 +63,14 @@ const Home = () => {
                         <h1>{error}</h1>
                     </div> :
                     <div className="allShows__container">
-                        {isSearch ? null :
+                        {isSearch ?
+                            <div className="allShowsBtn__container">
+                                <button 
+                                    className="allShowsBtn"
+                                    onClick={getDataAgain}
+                                >All shows</button>
+                            </div>
+                        :
                             <Pagination 
                                 currentPage={currentPage}
                                 setCurrentPage={setCurrentPage}

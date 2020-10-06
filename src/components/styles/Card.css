@@ -9,6 +9,7 @@
     display: flex;
     flex-direction: column;
     padding-bottom: 5px;
+    text-decoration: none;
 }
 
 .card__container:hover {
