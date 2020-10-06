@@ -2,7 +2,7 @@ import React from 'react';
 import ReactStars from "react-rating-stars-component";
 import './styles/Card.css';
 
-const Card = ({show}) => {
+const Card = ({ show }) => {
 
     const {name, image, genres, runtime, rating} = show;
 
@@ -21,9 +21,9 @@ const Card = ({show}) => {
 
     return (
         <div>
-            { image ? 
+            { image ?
                 <div className="card__container">
-                    <div className="cardImage" style={{backgroundImage: `url(${image.medium})`}}></div> 
+                    <div className="cardImage" style={{backgroundImage: `url(${image.medium})`}}></div>
                     <div className="info__container">
                         <h4>{name}</h4>
                         {
@@ -57,9 +57,7 @@ const Card = ({show}) => {
                 </div>
                 : null
             }
-            
         </div> 
-        
     );
 }
  

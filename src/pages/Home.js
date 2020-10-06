@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Search from '../components/Search';
 import List from '../components/List';
-import Card from '../components/Card';
 import SpinnerL from '../components/SpinnerL';
+import Pagination from '../components/Pagination';
 import './styles/Home.css';
 
 const Home = () => {
@@ -12,24 +12,12 @@ const Home = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [isSearch, setIsSearch] = useState(false);
     const [showSearch, setShowSearch] = useState('');
-    const [showFound, setShowFound] = useState({});
     const [loading, setLoading] = useState(true);
-
-    const nextPage = () => {
-        setLoading(true);
-        let next = currentPage + 1;
-        setCurrentPage(next);
-    }
-
-    const previousPage = () => {
-        setLoading(true);
-        let previuos = currentPage - 1;
-        setCurrentPage(previuos);
-    }
+    const [error, setError] = useState('');
 
     const getData = () => {
         setLoading(true);
-        // let getShows = 'http://api.tvmaze.com/shows?page=203';
+        setError(false);
         let getShows = `http://api.tvmaze.com/shows?page=${currentPage}`;
         let getSearch = `http://api.tvmaze.com/singlesearch/shows?q=${showSearch}`;
         let url
@@ -40,11 +28,11 @@ const Home = () => {
             setLoading(false);
             console.log(response.data[0]);
             console.log(response.data);
-            isSearch ? setShowFound(response.data) : setShows(response.data);
-            setShows(response.data);
+            isSearch ? setShows([response.data]) : setShows(response.data);
         })
         .catch(error => {
             setLoading(false);
+            isSearch ? setError('Show not found') : setError('Ups! Try later please');
             console.log(error);
         })
     };
@@ -60,40 +48,32 @@ const Home = () => {
                 setShowSearch={setShowSearch}
                 setIsSearch={setIsSearch}
             />
-            {
-                loading ?
-                <SpinnerL /> :
-                <div className="allShows__container">
-                    <div className="pagination__container">
-                        <button 
-                            className="btnPag"
-                            onClick={previousPage}
-                            disabled={currentPage===1}
-                        >Previous</button>
-                        <p className="currentPage">Page {currentPage}</p>
-                        <button
-                            className="btnPag"
-                            onClick={nextPage}
-                            disabled={currentPage===204}
-                        >Next</button>
-                    </div>
-                    <List 
-                        shows={shows}
-                    />
-                    <div className="pagination__container">
-                        <button 
-                            className="btnPag"
-                            onClick={previousPage}
-                            disabled={currentPage===1}
-                        >Previous</button>
-                        <p className="currentPage">Page {currentPage}</p>
-                        <button
-                            className="btnPag"
-                            onClick={nextPage}
-                            disabled={currentPage===204}
-                        >Next</button>
-                    </div>
-                </div>    
+            {loading ?
+                <SpinnerL /> 
+                : error ? 
+                    <div className="error__container">
+                        <h1>{error}</h1>
+                    </div> :
+                    <div className="allShows__container">
+                        {isSearch ? null :
+                            <Pagination 
+                                currentPage={currentPage}
+                                setCurrentPage={setCurrentPage}
+                                setLoading={setLoading}
+                            />
+
+                        }
+                        <List 
+                            shows={shows}
+                        />
+                        {isSearch ? null :
+                            <Pagination 
+                                currentPage={currentPage}
+                                setCurrentPage={setCurrentPage}
+                                setLoading={setLoading}
+                            />
+                        }
+                    </div>    
             }
         </div>
     );
