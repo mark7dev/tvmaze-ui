@@ -8,7 +8,7 @@ const List = ({shows}) => {
         <div className="list__container">
             {shows.map( show => (
                 <div key={show.id}>
-                    <Link to={`/${show.id}`}>
+                    <Link to={`/${show.id}`} style={{ textDecoration: 'none' }}>
                         <Card 
                             show={show}
                         />

@@ -1,7 +1,8 @@
-import Axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import RecursiveComponent from 'react-json-component';
+
 
 const Show = () => {
 
@@ -13,17 +14,24 @@ const Show = () => {
         axios(`http://api.tvmaze.com/shows/${id}`)
             .then(response => {
                 console.log(response.data);
-                setData(JSON.stringify(response.data, undefined, 2))
+                setData(response.data)
             })
             .catch(error => {
                 console.log(error);
             })
-        
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return ( 
         <div className="show__container">
-            <textarea value={data} rows="60" cols="100"></textarea>
+            <RecursiveComponent 
+                property={data}
+                propertyName="root"
+                excludeBottomBorder={false}
+                emptyPropertyLabel="Property is empty"
+                rootProperty={true}
+                propertyNameProcessor={(name) => name + ": "}
+            />
         </div>
     );
 }
