@@ -25,3 +25,7 @@
 .currentPage {
     margin: 0 10px;
 }
+
+.btnPag:disabled {
+    opacity: 0.5;
+}

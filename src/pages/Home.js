@@ -3,6 +3,7 @@ import axios from 'axios';
 import Search from '../components/Search';
 import List from '../components/List';
 import Card from '../components/Card';
+import SpinnerL from '../components/SpinnerL';
 import './styles/Home.css';
 
 const Home = () => {
@@ -15,11 +16,13 @@ const Home = () => {
     const [loading, setLoading] = useState(true);
 
     const nextPage = () => {
+        setLoading(true);
         let next = currentPage + 1;
         setCurrentPage(next);
     }
 
     const previousPage = () => {
+        setLoading(true);
         let previuos = currentPage - 1;
         setCurrentPage(previuos);
     }
@@ -58,20 +61,20 @@ const Home = () => {
                 setIsSearch={setIsSearch}
             />
             {
-                isSearch && !loading ?
-                <Card 
-                    show={showFound}
-                /> :
+                loading ?
+                <SpinnerL /> :
                 <div className="allShows__container">
                     <div className="pagination__container">
                         <button 
                             className="btnPag"
                             onClick={previousPage}
+                            disabled={currentPage===1}
                         >Previous</button>
                         <p className="currentPage">Page {currentPage}</p>
                         <button
                             className="btnPag"
                             onClick={nextPage}
+                            disabled={currentPage===204}
                         >Next</button>
                     </div>
                     <List 
@@ -81,11 +84,13 @@ const Home = () => {
                         <button 
                             className="btnPag"
                             onClick={previousPage}
+                            disabled={currentPage===1}
                         >Previous</button>
                         <p className="currentPage">Page {currentPage}</p>
                         <button
                             className="btnPag"
                             onClick={nextPage}
+                            disabled={currentPage===204}
                         >Next</button>
                     </div>
                 </div>    
